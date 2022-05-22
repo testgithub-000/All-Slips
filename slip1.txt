@@ -1,0 +1,314 @@
+A) Write an Android Program to demonstrate Activity life Cycle
+
+
+package com.example.myactivity_lifecycle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+public class MainActivity extends AppCompatActivity {
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+Log.d("lifecycle","onCreate invoked");
+}
+@Override
+protected void onStart() {
+super.onStart();
+Log.d("lifecycle","onStart invoked");
+}
+@Override
+protected void onResume() {
+super.onResume();
+Log.d("lifecycle","onResume invoked");
+}
+@Override
+protected void onPause() {
+super.onPause();
+Log.d("lifecycle","onPause invoked");
+}
+@Override
+protected void onStop() {
+super.onStop();
+Log.d("lifecycle","onStop invoked");
+}
+@Override
+protected void onRestart() {
+super.onRestart();
+Log.d("lifecycle","onRestart invoked");
+}
+@Override
+protected void onDestroy() {
+super.onDestroy();
+Log.d("lifecycle","onDestroy invoked");
+}
+}
+
+
+
+
+
+
+B) Create table Customer (id, name, address, phno). Create Android Application for performing the
+following operation on the table. (usingsqlite database)
+i) Insert New Customer Details.
+ii) Show All the Customer Details
+
+
+
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<EditText
+android:id="@+id/et1"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:hint="Customer Name" />
+<EditText
+android:id="@+id/et2"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:hint="Address" />
+<EditText
+android:id="@+id/et3"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:hint="Customer Phone"/>
+<TableRow>
+<Button
+android:id="@+id/b1"
+android:layout_width="200dp"
+android:layout_height="50dp"
+android:text="Save"/>
+<Button
+android:id="@+id/b2"
+android:layout_width="200dp"
+android:layout_height="50dp"
+android:text="Show"/>
+</TableRow>
+<TableRow>
+<ListView
+android:id="@+id/lv"
+android:layout_height="wrap_content"
+android:layout_width="200dp"/>
+</TableRow>
+</TableLayout>
+MainActivity.java
+package com.example.mycustomer;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+import java.util.List;
+public class MainActivity extends AppCompatActivity {
+EditText et1,et2,et3;
+Button b1,b2;
+ListView lv;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+et1=(EditText)findViewById(R.id.et1);
+et2=(EditText)findViewById(R.id.et2);
+et3=(EditText)findViewById(R.id.et3);
+b1=(Button)findViewById(R.id.b1);
+b2=(Button)findViewById(R.id.b2);
+lv=(ListView)findViewById(R.id.lv);
+mydb mdb=new mydb(this,"Customer.db",null,1);
+String name=et1.getText().toString();
+String addr=et2.getText().toString();
+String contact=et3.getText().toString();
+b1.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+long r=mdb.addDetails(name,addr,contact);
+if(r>0)
+Toast.makeText(MainActivity.this, "Record saved successfully",
+Toast.LENGTH_SHORT).show();
+else
+Toast.makeText(MainActivity.this, "Record not saved",
+Toast.LENGTH_SHORT).show();
+}
+});
+b2.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+List<Customer> l=mdb.getDetails();
+ArrayAdapter aa=new
+ArrayAdapter<Customer>(getApplicationContext(),
+android.R.layout.simple_list_item_1,l);
+lv.setAdapter(aa);
+}
+});
+}
+}
+Customer.java
+package com.example.mycustomer;
+public class Customer {
+String cname,addr,contact;
+public Customer(String ccname, String caddr, String ccontact){
+ccname=this.cname;
+caddr=this.addr;
+ccontact=this.contact;
+}
+public String getCname() {
+return cname;
+}
+public String getAddr() {
+return addr;
+}
+public String getContact() {
+return contact;
+}
+@Override
+public String toString(){
+return cname+""+addr+""+contact;
+}
+}
+Mydb.java
+package com.example.mycustomer;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
+public class mydb extends SQLiteOpenHelper{
+String dbname="Customer.db";
+public mydb(Context c, String dbname, SQLiteDatabase.CursorFactory cf, int
+version){
+super(c,dbname,cf,1);
+}
+@Override
+public void onCreate(SQLiteDatabase db){
+db.execSQL("Create table Customer(id integer primary key,name text,caddr
+text,cphone text)");
+}
+@Override
+public void onUpgrade(SQLiteDatabase db, int oldv, int newv){
+}
+public long addDetails(String Custname,String Custaddr,String Custcontact){
+ContentValues cv=new ContentValues();
+cv.put("name",Custname);
+cv.put("caddr",Custaddr);
+cv.put("cphone",Custcontact);
+SQLiteDatabase db=this.getWritableDatabase();
+long ret=db.insert("Customer",null,cv);
+return ret;
+}
+public ArrayList<Customer>getDetails(){
+String sql="Select * from Customer";
+SQLiteDatabase db=this.getReadableDatabase();
+ArrayList<Customer> clist = new ArrayList<>();
+Cursor cf=db.rawQuery(sql,null);
+if(cf.getCount()>0){
+cf.moveToFirst();
+do{
+String name=cf.getString(cf.getColumnIndexOrThrow("name"));
+String addr=cf.getString(cf.getColumnIndexOrThrow("caddr"));
+String contact=cf.getString(cf.getColumnIndexOrThrow("cphone"));
+Customer c1=new Customer(name,addr,contact);
+clist.add(c1);
+}
+while (cf.moveToNext());
+}
+return clist;
+}
+}
+
+
+
+
+A) Write a C program to find whether a given file is present in current directory or not.
+
+
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc, char *argv[])
+{
+ if (access(argv[1],F_OK)==0)
+ printf("File %s exists", argv[1]);
+ else
+ printf("File %s doesn't exist.", argv[1]);
+ return 0;
+}
+
+
+
+
+B) Write a C program which blocks SIGOUIT signal for 5 seconds. After 5 second process checks any
+occurrence of quit signal during this period, if so, it unblock the signal. Now another occurrence of quit
+signal terminates the program. (Use sigprocmask() and sigpending() )
+
+#include<sys/types.h>
+#include<sys/wait.h>
+#include<unistd.h>
+#include<time.h>
+#include<sys/times.h>
+#include<stdio.h>
+#include<stdlib.h>
+int main(void)
+{
+int i, status;
+pid_t pid;
+time_t currentTime;
+struct tms cpuTime;
+if((pid = fork())==-1) //start child process
+{
+perror("\nfork error");
+exit(EXIT_FAILURE);
+}
+else if(pid==0) //child process
+{
+time(&currentTime);
+printf("\nChild process started at %s",ctime(&currentTime));
+for(i=0;i<5;i++)
+{
+printf("\nCounting= %dn",i); //count for 5 seconds
+sleep(1);
+}
+time(&currentTime);
+printf("\nChild process ended at %s",ctime(&currentTime));
+exit(EXIT_SUCCESS);
+}
+else
+{ //Parent process
+time(&currentTime); // gives normal time
+printf("\nParent process started at %s ",ctime(&currentTime));
+if(wait(&status)== -1) //wait for child process
+perror("\n wait error");
+if(WIFEXITED(status))
+printf("\nChild process ended normally");
+else
+printf("\nChild process did not end normally");
+if(times(&cpuTime)<0) //Get process time
+perror("\nTimes error");
+else
+{ // _SC_CLK_TCK: system configuration time: seconds clock tick
+printf("\nParent process user time= %fn",((double)
+cpuTime.tms_utime));
+printf("\nParent process system time = %fn",((double)
+cpuTime.tms_stime));
+printf("\nChild process user time = %fn",((double)
+cpuTime.tms_cutime));
+printf("\nChild process system time = %fn",((double)
+cpuTime.tms_cstime));
+}
+time(&currentTime);
+printf("\nParent process ended at %s",ctime(&currentTime));
+exit(EXIT_SUCCESS);
+}
+}
+

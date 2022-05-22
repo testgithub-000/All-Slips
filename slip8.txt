@@ -1,0 +1,388 @@
+A) Write an Android program to read 5 numbers and print the sum of all
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TableRow
+android:layout_height="wrap_content"
+android:layout_width="wrap_content"
+android:orientation="horizontal">
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="List"/>
+<EditText
+android:layout_height="50dp"
+android:layout_width="200dp"
+android:id="@+id/l"
+android:hint="Enter 5 numbers"/>
+</TableRow>
+<TableRow
+android:layout_height="wrap_content"
+android:layout_width="wrap_content"
+android:orientation="horizontal">
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Ans"
+android:id="@+id/ans"/>
+<EditText
+android:layout_height="50dp"
+android:layout_width="200dp"
+android:id="@+id/et" />
+</TableRow>
+<TableRow
+android:layout_height="wrap_content"
+android:layout_width="wrap_content"
+android:orientation="vertical">
+<RadioGroup
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/rg">
+<RadioButton
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Sum"
+android:id="@+id/rd1"
+/>
+<RadioButton
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Average"
+android:id="@+id/rd2"
+/>
+</RadioGroup>
+</TableRow>
+</TableLayout>
+MainActivity.java
+package com.example.mysumavg;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+RadioGroup rg;
+Button ans;
+EditText l, et;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+rg=(RadioGroup)findViewById(R.id.rg);
+ans=(Button) findViewById(R.id.ans);
+et = (EditText) findViewById(R.id.et);
+ans.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+l= (EditText) findViewById(R.id.l);
+String str = l.getText().toString();
+String[] arr = str.split(",");
+int id = rg.getCheckedRadioButtonId();
+switch (id){
+case R.id.rd1:int sum=0;
+try{
+for (int i=0; i<arr.length; i++){
+sum+= Integer.parseInt(arr[i]);
+et.setText("Sum="+sum);
+}
+}
+catch (NumberFormatException ne){
+Log.e("Except", "NE except");
+}
+break;
+case R.id.rd2: float avg;
+sum=0;
+try{
+for (int i=0; i<arr.length; i++){
+sum+= Integer.parseInt(arr[i]);
+}
+avg=sum/arr.length;
+et.setText("Average="+avg);
+}
+catch (NumberFormatException ne){
+Log.e("Except", "NE except");
+}
+break;
+default:
+Toast.makeText(MainActivity.this, "Please select radio button",
+Toast.LENGTH_SHORT).show();
+}
+}
+});
+}
+}
+
+
+
+
+B) Create a Notification in Android and display the notification message on second activity
+
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="ANDROID NOTIFICATION"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintLeft_toLeftOf="parent"
+app:layout_constraintRight_toRightOf="parent"
+app:layout_constraintTop_toTopOf="parent"
+app:layout_constraintVertical_bias="0.091"
+android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/button"
+android:layout_marginBottom="112dp"
+android:layout_marginEnd="8dp"
+android:layout_marginStart="8dp"
+android:text="Notify"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintStart_toStartOf="parent" />
+</LinearLayout>
+MainActivity.java
+package com.example.mynotification;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+public class MainActivity extends AppCompatActivity {
+Button button;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+button = findViewById(R.id.button);
+button.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+addNotification();
+}
+});
+}
+private void addNotification() {
+NotificationCompat.Builder builder =
+new NotificationCompat.Builder(this)
+.setSmallIcon(R.drawable.img) //set icon for notification
+.setContentTitle("Notifications Example") //set title of notification
+.setContentText("This is a notification message")//this is notification
+message
+.setAutoCancel(true) // makes auto cancel of notification
+.setPriority(NotificationCompat.PRIORITY_DEFAULT); //set priority
+of notification
+Intent notificationIntent = new Intent(this, NotificationView.class);
+notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//notification message will get at NotificationView
+notificationIntent.putExtra("message", "This is a notification message");
+PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+notificationIntent,
+PendingIntent.FLAG_UPDATE_CURRENT);
+builder.setContentIntent(pendingIntent);
+// Add as notification
+NotificationManager manager = (NotificationManager)
+getSystemService(Context.NOTIFICATION_SERVICE);
+manager.notify(0, builder.build());
+}
+}
+Activity_notification_view.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".NotificationView">
+<TextView
+android:id="@+id/textView2"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:gravity="center"
+android:text="your detail of notification..."
+android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+<TextView
+android:id="@+id/textView"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginBottom="8dp"
+android:layout_marginEnd="8dp"
+android:layout_marginStart="8dp"
+android:layout_marginTop="8dp"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintHorizontal_bias="0.096"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintTop_toBottomOf="@+id/textView2"
+app:layout_constraintVertical_bias="0.206"
+android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+</LinearLayout>
+NotificationView.java
+package com.example.mynotification;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.TextView;
+public class NotificationView extends AppCompatActivity {
+TextView textView;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_notification_view);
+textView = findViewById(R.id.textView);
+//getting the notification message
+String message=getIntent().getStringExtra("message");
+textView.setText(message);
+}
+}
+String.xml
+<resources>
+<string name="app_name">AndroidNotification</string>
+<string name="notification_activity">NotificationView</string>
+</resource
+
+
+
+
+A) Write a C program to get and set the resource limits such as files, memory associated with a process.
+
+
+#include <stdio.h>
+#include <sys/resource.h>
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+int main() {
+struct rlimit old_lim, lim, new_lim;
+// Get old limits
+if( getrlimit(RLIMIT_NOFILE, &old_lim) == 0)
+printf("Old limits -> soft limit= %ld \t"
+" hard limit= %ld \n", old_lim.rlim_cur,
+old_lim.rlim_max);
+else
+fprintf(stderr, "%s\n", strerror(errno));
+// Set new value
+lim.rlim_cur = 3;
+lim.rlim_max = 1024;
+// Set limits
+if(setrlimit(RLIMIT_NOFILE, &lim) == -1)
+fprintf(stderr, "%s\n", strerror(errno));
+// Get new limits
+if( getrlimit(RLIMIT_NOFILE, &new_lim) == 0)
+printf("New limits -> soft limit= %ld "
+"\t hard limit= %ld \n", new_lim.rlim_cur,
+new_lim.rlim_max);
+else
+fprintf(stderr, "%s\n", strerror(errno));
+return 0;
+}
+Output:
+Old limits -> soft limit= 1048576 hard limit= 1048576
+New limits -> soft limit= 3 hard limit= 1024
+
+
+
+
+B) Write a C program which receives file names as command line arguments and display those filenames in ascending order according to their sizes.
+(e.g $ a.out a.txt b.txt c.txt, …)
+
+
+#include<stdio.h>
+#include<dirent.h>
+#include<string.h>
+#include<sys/stat.h>
+#include<time.h>
+#include<stdlib.h>
+structfilelist
+{
+charfname[100];
+intfsize;
+};
+int main(intargc,char *argv[])
+{
+DIR *dp;
+inti,j,k;
+structdirent *ep;
+struct stat sb;
+charmon[100];
+structfilelist f1[100],temp;
+j=0;
+for(i=1;i<argc;i++)
+{
+dp=opendir("./");
+if (dp!=NULL)
+{
+while(ep=readdir(dp))
+{
+if((strcmp(ep->d_name,argv[i]))==0)
+{
+stat(ep->d_name,&sb);
+strcpy(f1[j].fname,ep->d_name);
+f1[j].fsize=sb.st_size;
+j++;
+break;
+}
+}
+}
+(void)closedir(dp);
+}
+for(i=0;i<j;i++)
+{
+for(k=0;k<=j;k++)
+{
+if(f1[i].fsize< f1[k].fsize)
+{
+temp=f1[k];
+f1[k]=f1[i];
+f1[i]=temp;
+}
+}
+}
+for(i=0;i<j;i++)
+{
+printf("%s\t%d\n",f1[i].fname,f1[i].fsize);
+}
+return 0;
+}
+/*Output:-
+[root@localhostsppuslipquestions]# cc slip20.c
+[root@localhostsppuslipquestions]# ./a.out slip12.c a1.c q12.c
+a1.c 465
+q12.c 596
+slip12.c 803
+
+
+
+
+
+
+
+

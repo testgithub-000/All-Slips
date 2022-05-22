@@ -1,0 +1,131 @@
+A) Write an Android Program to Demonstrate Date Picker Dialog in Android
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<DatePicker
+android:id="@+id/dp"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content" />
+<Button
+android:id="@+id/b"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="click date"
+android:onClick="myclick"/>
+</LinearLayout>
+MainActivity.java
+package com.example.datepicker;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+DatePicker dp=(DatePicker) findViewById(R.id.dp);
+String d=dp.getDayOfMonth()+" "+dp.getMonth()+" "+dp.getYear();
+Toast.makeText(getApplicationContext(), d,
+Toast.LENGTH_LONG).show();
+}
+}
+
+
+
+
+
+A) Write a C program to display the last access and modified time of a given file.
+
+
+
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+int main()
+{
+char filename[] = "c:\\test.txt";
+char timeStr[ 100 ] = "";
+struct stat buf;
+time_t ltime;
+char datebuf [9];
+char timebuf [9];
+if (!stat(filename, &buf))
+{
+strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &buf.st_mtime));
+printf("\nLast modified date and time = %s\n", timeStr);
+}
+else
+{
+printf("error getting atime\n");
+}
+_strtime(timebuf);
+_strdate(datebuf);
+printf("\nThe Current time is %s\n",timebuf);
+printf("\nThe Current Date is %s\n",datebuf);
+time( &ltime );
+printf("\nThe Current time is %s\n",ctime( &ltime ));
+printf("\Diff between current and last modified time ( in seconds ) %f\n", difftime(ltime ,buf.st_mtime )
+);
+return 0;
+}
+
+
+
+
+B) Write a C program to implement the following unix/linux command (use fork, pipe and exec system call). Your program should block the signal Ctrl-C and Ctrl-\ signal during the execution.
+ls –l | wc –l
+
+
+
+
+// C code to implement ls | wc command
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include<errno.h>
+#include<sys/wait.h>
+#include <unistd.h>
+int main(){
+// array of 2 size a[0] is for
+// reading and a[1] is for
+// writing over a pipe
+int a[2];
+// using pipe for inter process communication
+pipe(a);
+if(!fork())
+{
+// closing normal stdout
+close(1);
+// making stdout same as a[1]
+dup(a[1]);
+// closing reading part of pipe
+// we don't need of it at this time
+close(a[0]);
+// executing ls
+execlp("ls","ls",NULL);
+}
+else
+{
+// closing normal stdin
+close(0);
+// making stdin same as a[0]
+dup(a[0]);
+// closing writing part in parent,
+// we don't need of it at this time
+close(a[1]);
+// executing wc
+execlp("wc","wc",NULL);
+}
+}

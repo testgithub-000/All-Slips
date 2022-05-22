@@ -1,0 +1,357 @@
+A) Create a Simple Android Application Which Send ―Hello‖ message from one activity to another with help of Button (Use Intent).
+
+
+Activitymain.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<EditText
+android:id="@+id/send_text_id"
+android:layout_width="300dp"
+android:layout_height="wrap_content"
+android:textSize="25dp"
+android:hint="Input"
+android:textStyle="bold"
+android:layout_marginTop="20dp"
+android:layout_marginLeft="40dp"/>
+<Button
+android:id="@+id/send_button_id"
+android:layout_width="wrap_content"
+android:layout_height="40dp"
+android:text="send"
+android:textStyle="bold"
+android:layout_marginTop="150dp"
+android:layout_marginLeft="150dp"/>
+</RelativeLayout>
+Mainactivity.java
+package com.example.myhello_intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+Button send_button;
+EditText send_text;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+send_button = (Button)findViewById(R.id.send_button_id);
+send_text = (EditText)findViewById(R.id.send_text_id);
+send_button.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v)
+{
+String str = send_text.getText().toString();
+Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
+intent.putExtra("message_key", str);
+startActivity(intent);
+}
+});
+}
+}
+Activitysecond.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SecondActivity">
+<TextView
+android:id="@+id/received_value_id"
+android:layout_width="300dp"
+android:layout_height="50dp"
+android:textStyle="bold"
+android:textSize="40dp"
+android:layout_marginTop="20dp"
+android:layout_marginLeft="40dp"/>
+</RelativeLayout>
+SecondActivity.java
+package com.example.myhello_intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+public class SecondActivity extends AppCompatActivity {
+TextView receiver_msg;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_second_activity);
+receiver_msg = (TextView)findViewById(R.id.received_value_id);
+Intent intent = getIntent();
+String str = intent.getStringExtra("message_key");
+receiver_msg.setText(str);
+}
+}
+
+
+
+B) Create an Android application which will ask the user to input his name and a message, display the two items concatenated in a label, and change the format of the label using radio buttons and check boxes for selection, the user can make the label text bold, underlined or italic and change its color .include buttons to display the message in the label, clear the text boxes and label and then exit.
+
+
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TableRow>
+<EditText
+android:id="@+id/name"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:hint="Name" />
+</TableRow>
+<TableRow>
+<EditText
+android:id="@+id/msg"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:hint="Massage" />
+</TableRow>
+<TableRow>
+<TextView
+android:id="@+id/con"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Concatinate display here" />
+</TableRow>
+<TableRow>
+<RadioButton
+android:id="@+id/font"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Font"/>
+</TableRow>
+<TableRow>
+<RadioButton
+android:id="@+id/style"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Style"/>
+</TableRow>
+<TableRow>
+<CheckBox
+android:id="@+id/bold"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Bold"/>
+</TableRow>
+<TableRow>
+<CheckBox
+android:id="@+id/italic"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Italic"/>
+</TableRow>
+<TableRow>
+<CheckBox
+android:id="@+id/underline"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Underline"/>
+</TableRow>
+<TableRow>
+<RadioButton
+android:id="@+id/color"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Change Color"/>
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/display"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Display" />
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/clear"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Clear" />
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/exit"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Exit" />
+</TableRow>
+</TableLayout>
+MainActivity.java
+package com.example.myconcatinate;
+import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
+public class MainActivity extends AppCompatActivity {
+EditText name,msg;
+TextView con;
+Button display,clear,exit;
+RadioButton font,style,color;
+CheckBox bold,italic,underline;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+name=(EditText) findViewById(R.id.name);
+msg=(EditText) findViewById(R.id.msg);
+con=(TextView) findViewById(R.id.con);
+display = (Button) findViewById(R.id.display);
+clear = (Button) findViewById(R.id.clear);
+exit = (Button) findViewById(R.id.exit);
+font = (RadioButton) findViewById(R.id.font);
+style = (RadioButton) findViewById(R.id.style);
+color = (RadioButton) findViewById(R.id.color);
+bold = (CheckBox) findViewById(R.id.bold);
+italic = (CheckBox) findViewById(R.id.italic);
+underline = (CheckBox) findViewById(R.id.underline);
+display.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+String c=name.getText().toString()+" "+msg.getText().toString();
+con.setText(c);
+con.setTypeface(null, Typeface.BOLD);
+con.setTextSize(20);
+}
+});
+clear.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+name.setText(" ");
+msg.setText(" ");
+}
+});
+italic.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+con.setTypeface(null, Typeface.ITALIC);
+}
+});
+bold.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+con.setTypeface(null, Typeface.BOLD);
+}
+});
+underline.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+con.setPaintFlags(con.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+}
+});
+exit.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+}
+});
+color.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+con.setTextColor(Color.CYAN);
+}
+});
+}
+}
+
+
+
+
+
+A)Write a C program that catches the ctrl-c (SIGINT) signal for the first time and display the appropriate message and exits on pressing ctrl-c again.
+
+
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+void sigfun(int sig)
+{
+printf("You have presses Ctrl-C , please press again to exit");
+(void) signal(SIGINT, SIG_DFL);
+}
+int main()
+{
+(void) signal(SIGINT, sigfun);
+while(1) {
+printf("Hello World!
+");
+sleep(1);
+}
+return(0);
+}
+
+
+
+B) Write a C program to implement the following unix/linux command on current directory
+ls –l > output.txt
+DO NOT simply exec ls -l > output.txt or system command from the program.
+
+
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+main(int argc, char *argv[])
+{
+char d[50];
+if(argc==2)
+{
+bzero(d,sizeof(d));
+strcat(d,"ls ");
+strcat(d,"> ");
+strcat(d,argv[1]);
+system(d);
+}
+else
+printf("\nInvalid No. of inputs");
+}
+/*
+output:-
+[root@localhost unix]# cc slip23.c
+[root@localhost unix]# ls
+exitdemo.c hello orphan.c signaldemo.c~ x.out
+exitprg.c hello1 orphan.c~ slip10.c zombie.c
+exitprg.c~ hello1.c p.c slip10.c~ zombie.c~
+f1.txt hello.c p.c~ slip16.c
+f1.txt~ hello.txt pipedemo.c slip16.c~
+f3 hello.txt~ pipedemo.c~ slip19.c
+[root@localhost unix]# cat >file3
+[6]+ Stopped cat > file3
+[root@localhost unix]# ./a.out file3
+[root@localhost unix]# cat file3
+exitdemo.c hello orphan.c signaldemo.c~ x.out
+exitprg.c hello1 orphan.c~ slip10.c zombie.c
+exitprg.c~ hello1.c p.c slip10.c~ zombie.c~
+f1.txt hello.c p.c~ slip16.c
+f1.txt~ hello.txt pipedemo.c slip16.c~
+f3 hello.txt~ pipedemo.c~ slip19.c
+*/
+
+
+
+

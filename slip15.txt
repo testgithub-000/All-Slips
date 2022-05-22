@@ -1,0 +1,339 @@
+A) Write an Android code to merge given two Array/List
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TableRow >
+<TextView
+android:layout_width="match_parent"
+android:layout_height="100dp"
+android:text="list 1"
+android:textAlignment="center" />
+<EditText
+android:id="@+id/et1"
+android:layout_width="375dp"
+android:layout_height="match_parent"
+android:textAlignment="center" />
+</TableRow>
+<TableRow >
+<TextView
+android:layout_width="100dp"
+android:layout_height="50dp"
+android:text="list 2"
+android:textAlignment="center" />
+<EditText
+android:id="@+id/et3"
+android:layout_width="match_parent"
+android:layout_height="100dp"
+android:textAlignment="center" />
+</TableRow>
+<TableRow >
+<TextView
+android:layout_width="100dp"
+android:layout_height="50dp"
+android:text="list 3"
+android:textAlignment="center" />
+<EditText
+android:id="@+id/et2"
+android:layout_width="match_parent"
+android:layout_height="100dp"
+android:textAlignment="center" />
+</TableRow>
+<Button
+android:id="@+id/btn"
+android:layout_height="50dp"
+android:layout_width="20dp"
+android:hint="merge"/>
+</TableLayout>
+MainActivity.java
+package com.example.merge_list;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+public class MainActivity extends AppCompatActivity {
+EditText et1, et2,et3;
+Button btn;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+btn = (Button) findViewById(R.id.btn);
+btn.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+et1 = (EditText) findViewById(R.id.et1);
+et2 = (EditText) findViewById(R.id.et2);
+et3 = (EditText) findViewById(R.id.et3);
+String ss1 = et1.getText().toString();
+String ss2 = et2.getText().toString();
+String ss3 = et3.getText().toString();
+List<String> l1 = new ArrayList<String>(Collections.singleton(ss1));
+List<String> l2 = new ArrayList<String>(Collections.singleton(ss2));
+List<String> l3 = new ArrayList<String>(Collections.singleton(ss3));
+List<String> l = new ArrayList<String>();
+l1.addAll(l2);
+l1.addAll(l3);
+Toast.makeText(MainActivity.this, "merge=" + l1.toString(),
+Toast.LENGTH_SHORT).show();
+}
+});
+}
+}
+
+
+
+
+B) Write an Android Application to send Email.
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<EditText
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:id="@+id/to"
+android:hint="to"/>
+<EditText
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:id="@+id/sub"
+android:hint="sub"/>
+<EditText
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:id="@+id/msg"
+android:hint="msg"/>
+<Button
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:id="@+id/send"
+android:text="Send"/>
+</LinearLayout>
+MainActivity.java
+package com.example.myemail;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+EditText etto,etmessage,etsubject;
+Button btsend;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+etto=findViewById(R.id.to);
+etmessage=findViewById(R.id.msg);
+etsubject=findViewById(R.id.sub);
+btsend=findViewById(R.id.send);
+btsend.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+Intent intent =new Intent(Intent.ACTION_VIEW,
+Uri.parse("mailto:"+ etto.getText().toString()));
+intent.putExtra(Intent.EXTRA_SUBJECT,etsubject.getText().toString());
+intent.putExtra(Intent.EXTRA_TEXT,etmessage.getText().toString());
+startActivity(intent);
+}
+});
+}
+}
+
+
+
+
+A) Write a C program to Identify the type (Directory, character device, Block device, Regular file, FIFO or pipe, symbolic link or socket) of given file using stat() system call.
+
+
+#include
+#include
+#include
+#include
+#include
+<sys/types.h>
+<sys/stat.h>
+<time.h>
+<stdio.h>
+<stdlib.h>
+int main(int argc, char *argv[]) {
+struct stat info;
+if (argc != 2) {printf("Enter filename\n");
+}
+if (stat(argv[1], &info) == -1) {
+printf("stat erro");
+exit(EXIT_FAILURE);
+}
+printf("I-node number:
+%ld\n", (long) info.st_ino);
+printf("File size:
+%lld bytes\n",(long long) info.st_size);
+printf("Last file access:
+%s", ctime(&info.st_atime));
+printf("Last file modification:
+%s", ctime(&info.st_mtime));
+printf("No of hard links: %d\n",info.st_nlink);
+printf("File Permissions: \t");
+printf(
+printf(
+printf(
+printf(
+printf(
+printf(
+printf(
+printf(
+printf(
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+(info.st_mode
+&
+&
+&
+&
+&
+&
+&
+&
+&
+S_IRUSR)
+S_IWUSR)
+S_IXUSR)
+S_IRGRP)
+S_IWGRP)
+S_IXGRP)
+S_IROTH)
+S_IWOTH)
+S_IXOTH)
+?
+?
+?
+?
+?
+?
+?
+?
+?
+"r"
+"w"
+"x"
+"r"
+"w"
+"x"
+"r"
+"w"
+"x"
+:
+:
+:
+:
+:
+:
+:
+:
+:
+"-");
+"-");
+"-");
+"-");
+"-");
+"-");
+"-");
+"-");
+"-");
+putchar('\n');
+}
+
+
+
+
+
+
+
+B) Write a C program which creates a child process and child process catches a signal SIGHUP, SIGINT and SIGQUIT. The Parent process send a SIGHUP or SIGINT signal after every 3 seconds, at the end of 15 second parent send SIGQUIT signal to child and child terminates by displaying message "My Papa has Killed me!!!”.
+
+
+#include<stdio.h>
+#include<signal.h>
+#include<stdlib.h>
+void sighup();
+void sigint();
+void sigquit();
+main()
+{
+int pid,i,j,k;
+if ((pid = fork() ) < 0)
+{
+perror("fork");
+exit(1);
+}
+if ( pid == 0)
+{
+signal(SIGHUP,sighup);
+signal(SIGINT,sigint);
+signal(SIGQUIT,sigquit);
+for(;;);
+}
+else
+{
+j=0;
+for(i=1;i<=5;i++)
+{
+j++;
+printf("PARENT: sending SIGHUP Signal : %d\n",j);
+kill(pid,SIGHUP);
+sleep(3);
+printf("PARENT: sending signal : %d\n",j);
+kill (pid,SIGINT);
+sleep(3);
+}
+sleep(3);
+printf("Parent sending SIGQUIT\n");
+kill(pid,SIGQUIT);
+}
+}
+void sighup()
+{
+signal(SIGHUP,sighup);
+printf("Child: I have received sighup\n");
+}
+void sigint()
+{
+signal(SIGINT,sigint);
+printf("Child: I have received sighINT\n");
+}
+void sigquit()
+{
+printf("My daddy has killed me\n");
+exit(0);
+}
+

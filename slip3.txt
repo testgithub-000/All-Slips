@@ -1,0 +1,386 @@
+A) A) Create an Android Application to accept two numbers and create two buttons (power and Average). Display the result on the next activity on Button click create two buttons (power and Average). Display the result on the next activity on Button click
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TableRow>
+<TextView
+android:id="@+id/n1"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:textSize="25dp"
+android:text="Number1" />
+<EditText
+android:id="@+id/num1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:ems="15"
+android:hint="num1"/>
+</TableRow>
+<TableRow>
+<TextView
+android:id="@+id/N2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Number2"
+android:textSize="25dp"
+tools:layout_editor_absoluteX="49dp"
+tools:layout_editor_absoluteY="134dp" />
+<EditText
+android:id="@+id/num2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:hint="num2"
+android:ems="10"/>
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/b1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Power"
+android:layout_gravity="center"
+tools:layout_editor_absoluteX="138dp"
+tools:layout_editor_absoluteY="257dp" />
+<Button
+android:id="@+id/b2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Average"
+android:layout_gravity="center"
+tools:layout_editor_absoluteX="138dp"
+tools:layout_editor_absoluteY="257dp" />
+</TableRow>
+</TableLayout>
+MainActivty.java
+package com.example.mypoweravg;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+EditText num1, num2;
+Button b1, b2;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+b1 = (Button) findViewById(R.id.b1);
+b2 = (Button) findViewById(R.id.b2);
+b1.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+try {
+num1 = (EditText) findViewById(R.id.num1);
+num2 = (EditText) findViewById(R.id.num2);
+int n1 = Integer.parseInt(num1.getText().toString());
+int n2 = Integer.parseInt((num2.getText().toString()));
+int result = (int) Math.pow(n1, n2);
+Intent i = new Intent(getApplicationContext(), MainActivity2.class);
+i.putExtra("text", "Power=");
+i.putExtra("result", result);
+startActivity(i);
+} catch (NumberFormatException ne) {
+Log.e("Error", "Error");
+}
+}
+});
+b2.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+try {
+num1 = (EditText) findViewById(R.id.num1);
+num2 = (EditText) findViewById(R.id.num2);
+int n1 = Integer.parseInt(num1.getText().toString());
+int n2 = Integer.parseInt((num2.getText().toString()));
+double result = (n1 + n2) / 2;
+Intent i = new Intent(getApplicationContext(), MainActivity2.class);
+i.putExtra("text", "Average=");
+i.putExtra("result", result);
+startActivity(i);
+} catch (NumberFormatException ne) {
+Log.e("Error", "Error");
+}
+}
+});
+}
+}
+Activty_main2.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity2">
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/tv" />
+</LinearLayout>
+MainActivity2.java
+package com.example.mypoweravg;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+public class MainActivity2 extends AppCompatActivity {
+TextView tv;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main2);
+tv = (TextView) findViewById(R.id.tv);
+Intent i = getIntent();
+Bundle extras = i.getExtras();
+String res = extras.getString("text");
+if(res.equals("Power=")){
+res+= extras.getInt("result");
+tv.setText(res);
+}
+else{
+res+=extras.getDouble("result");
+tv.setText(res);
+}
+}
+}
+
+
+
+B) Create an Android Application to perform following string operation according to user selection of radio button.
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TableRow>
+<TextView
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Enter String"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintLeft_toLeftOf="parent"
+app:layout_constraintRight_toRightOf="parent"
+app:layout_constraintTop_toTopOf="parent" />
+<EditText
+android:id="@+id/input"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:hint="enter string"/>
+</TableRow>
+<TableRow>
+<RadioGroup
+android:id="@+id/rg"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+<RadioButton
+android:id="@+id/r1"
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:text="uppercase"/>
+<RadioButton
+android:id="@+id/r2"
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:text="lowercase"/>
+<RadioButton
+android:id="@+id/r3"
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:text="right 5 char"/>
+<RadioButton
+android:id="@+id/r4"
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:text="left 5 char"/>
+</RadioGroup>
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/btn"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="output" />
+<EditText
+android:id="@+id/output"
+android:layout_width="250dp"
+android:layout_height="wrap_content"/>
+</TableRow>
+</TableLayout>
+MainActivity.java
+package com.example.myupperlowercase;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import java.util.Locale;
+public class MainActivity extends AppCompatActivity {
+EditText input,output;
+Button btn;
+RadioGroup rg;
+String inpstr, outstr, sub;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+input=(EditText)findViewById(R.id.input);
+output=(EditText)findViewById(R.id.output);
+rg=(RadioGroup)findViewById(R.id.rg);
+btn=(Button)findViewById(R.id.btn);
+btn.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+int id=rg.getCheckedRadioButtonId();
+switch (id){
+case R.id.r1:inpstr=input.getText().toString();
+outstr=inpstr.toUpperCase();
+output.setText(outstr);
+break;
+case R.id.r2:inpstr=input.getText().toString();
+outstr=inpstr.toLowerCase();
+output.setText(outstr);
+break;
+case R.id.r3:inpstr=input.getText().toString();
+sub=inpstr.substring(inpstr.length()-5,inpstr.length());
+output.setText(sub);
+break;
+case R.id.r4:inpstr=input.getText().toString();
+sub="";
+sub=inpstr.substring(0,5);
+break;
+}
+}
+});
+}
+}
+
+
+
+
+
+A)Write a C program to find file properties such as inode number, number of hard link, File permissions, File size, File access and modification time and so on of a given file using stat() system call.
+
+
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char *argv[]) {
+struct stat info;
+if (argc != 2) {
+printf("Enter filename\n");
+}
+if (stat(argv[1], &info) == -1) {
+printf("stat erro");
+exit(EXIT_FAILURE);
+}
+printf("I-node number: %ld\n", (long) info.st_ino);
+printf("File size: %lld bytes\n",(long long) info.st_size);
+printf("Last file access: %s", ctime(&info.st_atime));
+printf("Last file modification: %s", ctime(&info.st_mtime));
+printf("No of hard links: %d\n",info.st_nlink);
+printf("File Permissions: \t");
+printf( (info.st_mode & S_IRUSR) ? "r" : "-");
+printf( (info.st_mode & S_IWUSR) ? "w" : "-");
+printf( (info.st_mode & S_IXUSR) ? "x" : "-");
+printf( (info.st_mode & S_IRGRP) ? "r" : "-");
+printf( (info.st_mode & S_IWGRP) ? "w" : "-");
+printf( (info.st_mode & S_IXGRP) ? "x" : "-");
+printf( (info.st_mode & S_IROTH) ? "r" : "-");
+printf( (info.st_mode & S_IWOTH) ? "w" : "-");
+printf( (info.st_mode & S_IXOTH) ? "x" : "-");
+putchar('\n');
+}
+
+
+
+
+B) Write a C program to create ‘n’ child processes. When all ‘n’ child processes terminates, Display total cumulative time children spent in user and kernel mode.
+
+#include<sys/types.h>
+#include<sys/wait.h>
+#include<unistd.h>
+#include<time.h>
+#include<sys/times.h>
+#include<stdio.h>
+#include<stdlib.h>
+int main(void)
+{
+int i, status;
+pid_t pid;
+time_t currentTime;
+struct tms cpuTime;
+if((pid = fork())==-1) //start child process
+{
+perror("\nfork error");
+exit(EXIT_FAILURE);
+}
+else if(pid==0) //child process
+{
+time(&currentTime);
+printf("\nChild process started at %s",ctime(&currentTime));
+for(i=0;i<5;i++)
+{
+printf("\nCounting= %dn",i); //count for 5 seconds
+sleep(1);
+}
+time(&currentTime);
+printf("\nChild process ended at %s",ctime(&currentTime));
+exit(EXIT_SUCCESS);
+}
+else
+{ //Parent process
+time(&currentTime); // gives normal time
+printf("\nParent process started at %s ",ctime(&currentTime));
+if(wait(&status)== -1) //wait for child process
+perror("\n wait error");
+if(WIFEXITED(status))
+printf("\nChild process ended normally");
+else
+printf("\nChild process did not end normally");
+if(times(&cpuTime)<0) //Get process time
+perror("\nTimes error");
+else
+{ // _SC_CLK_TCK: system configuration time: seconds clock tick
+printf("\nParent process user time= %fn",((double)
+cpuTime.tms_utime));
+printf("\nParent process system time = %fn",((double)
+cpuTime.tms_stime));
+printf("\nChild process user time = %fn",((double)
+cpuTime.tms_cutime));
+printf("\nChild process system time = %fn",((double)
+cpuTime.tms_cstime));
+}
+time(&currentTime);
+printf("\nParent process ended at %s",ctime(&currentTime));
+exit(EXIT_SUCCESS);
+}
+}
+
+
+
+
+
+
+
+

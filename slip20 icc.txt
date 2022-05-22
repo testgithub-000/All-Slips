@@ -1,0 +1,462 @@
+A) Write an Android application to accept two numbers from the user, and displays them, but reject input if both numbers are greater than 10 and asks for two new numbers.
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity"
+android:orientation="vertical">
+<EditText
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:id="@+id/et1"
+android:hint="enter first number" />
+<EditText
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:id="@+id/et2"
+android:hint="enter second number" />
+<TextView
+android:layout_width="150dp"
+android:layout_height="50dp"
+android:id="@+id/tv" />
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="SHOW"
+android:id="@+id/b" />
+</LinearLayout>
+MainActivity.java
+package com.example.compare;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+Button b;
+TextView tv;
+EditText et1, et2;
+int n1, n2;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+b = (Button) findViewById(R.id.b);
+tv = (TextView) findViewById(R.id.tv);
+b.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+et1 = (EditText) findViewById(R.id.et1);
+et2 = (EditText) findViewById(R.id.et2);
+String num1 = et1.getText().toString();
+String num2= et2.getText().toString();
+try{
+n1 = Integer.parseInt(num1);
+n2 = Integer.parseInt(num2);
+if(n1>10 && n2>10){
+Toast.makeText(MainActivity.this, "Number greater than 10 please
+enter 2 new numbers", Toast.LENGTH_SHORT).show();
+}
+else{
+tv.setText(num1 + " " + num2);
+}
+}
+catch (NumberFormatException ne){
+Log.d("error", "error");
+}
+}
+});
+}
+}
+
+
+
+B) Create the simple calculator shown below also perform appropriate operation
+
+
+ActivityMain.xml
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_centerHorizontal="true"
+android:layout_centerVertical="true"
+tools:context=".MainActivity">
+<EditText
+android:id="@+id/et"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:textSize="50dp"/>
+<TableRow>
+<Button
+android:id="@+id/b7"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:textSize="30dp"
+android:text="7" />
+<Button
+android:id="@+id/b8"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="8" />
+<Button
+android:id="@+id/b9"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="9" />
+<Button
+android:id="@+id/bDivide"
+android:layout_width="100dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="50dp"
+android:layout_toRightOf="@+id/txtScreen"
+android:textSize="30dp"
+android:text="/" />
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/b4"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:textSize="30dp"
+android:text="4"/>
+<Button
+android:id="@+id/b5"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="5" />
+<Button
+android:id="@+id/b6"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="6" />
+<Button
+android:id="@+id/bMultiply"
+android:layout_width="100dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="50dp"
+android:layout_toRightOf="@+id/btnDivide"
+android:textSize="30dp"
+android:text="*" />
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/b1"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:textSize="30dp"
+android:text="1" />
+<Button
+android:id="@+id/b2"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="2" />
+<Button
+android:id="@+id/b3"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="3" />
+<Button
+android:id="@+id/bSubtract"
+android:layout_width="90dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="50dp"
+android:layout_toRightOf="@+id/btnMultiply"
+android:textSize="30dp"
+android:text="-" />
+</TableRow>
+<TableRow>
+<Button
+android:id="@+id/bDot"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:textSize="30dp"
+android:text="." />
+<Button
+android:id="@+id/b0"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="0" />
+<Button
+android:id="@+id/bClear"
+android:layout_width="80dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+android:textSize="30dp"
+android:text="C" />
+<Button
+android:id="@+id/bAdd"
+android:layout_width="100dp"
+android:layout_height="wrap_content"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="50dp"
+android:layout_toRightOf="@+id/btnSubtract"
+android:textSize="30dp"
+android:text="+" />
+</TableRow>
+<Button
+android:id="@+id/bEqual"
+android:layout_width="400dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="30dp"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="10dp"
+android:textSize="30dp"
+android:text="=" />
+</TableLayout>
+MainActivity.java
+package com.example.mycalculator;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+Button
+b7,b8,b9,bdivide,b4,b5,b6,bmultiply,b1,b2,b3,bsubstract,b0,bdot,bclear,badd,be
+qual;
+EditText et;
+Editable strn1;
+String strn2;
+int fdivide=0;
+int fadd=0;
+int fsubstract=0;
+int fmultiply=0;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+b7=(Button)findViewById(R.id.b7);
+b8=(Button)findViewById(R.id.b8);
+b9=(Button)findViewById(R.id.b9);
+bdivide=(Button)findViewById(R.id.bDivide);
+b4=(Button)findViewById(R.id.b4);
+b5=(Button)findViewById(R.id.b5);
+b6=(Button)findViewById(R.id.b6);
+bmultiply=(Button)findViewById(R.id.bMultiply);
+b1=(Button)findViewById(R.id.b1);
+b2=(Button)findViewById(R.id.b2);
+b3=(Button)findViewById(R.id.b3);
+bsubstract=(Button)findViewById(R.id.bSubtract);
+b0=(Button)findViewById(R.id.b0);
+bdot=(Button)findViewById(R.id.bDot);
+bclear=(Button)findViewById(R.id.bClear);
+badd=(Button)findViewById(R.id.bAdd);
+bequal=(Button)findViewById(R.id.bEqual);
+et=(EditText)findViewById(R.id.et);
+b7.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b7.getText();
+et.setText(s);
+}
+});
+b8.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b8.getText();
+et.setText(s);
+}
+});
+b9.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b9.getText();
+et.setText(s);
+}
+});
+b4.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b4.getText();
+et.setText(s);
+}
+});
+b5.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b5.getText();
+et.setText(s);
+}
+});
+b6.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b6.getText();
+et.setText(s);
+}
+});
+b1.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b1.getText();
+et.setText(s);
+}
+});
+b2.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b2.getText();
+et.setText(s);
+}
+});
+b3.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b3.getText();
+et.setText(s);
+}
+});
+b0.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+b0.getText();
+et.setText(s);
+}
+});
+bdot.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+String s=et.getText()+" "+bdot.getText();
+et.setText(s);
+}
+});
+bclear.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+et.setText(" ");
+}
+});
+bdivide.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+strn1=et.getText();
+et.setText(" ");
+fdivide=1;
+}
+});
+badd.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+strn1=et.getText();
+et.setText(" ");
+fadd=1;
+}
+});
+bsubstract.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+strn1=et.getText();
+et.setText(" ");
+fsubstract=1;
+}
+});
+bmultiply.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+strn1=et.getText();
+et.setText(" ");
+fmultiply=1;
+}
+});
+bequal.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+float n=0;
+strn2 = et.getText().toString();
+float n1=Float.parseFloat(String.valueOf(strn1));
+float n2=Float.parseFloat(String.valueOf(strn2));
+if (fadd==1)
+{
+n=n1+n2;
+}
+if (fsubstract==1)
+{
+n=n1-n2;
+}
+if (fdivide==1)
+{
+n=n1/n2;
+}
+if (fmultiply==1)
+{
+n=n1*n2;
+}
+et.setText(" "+n);
+}
+});
+}
+}
+
+
+
+A) Write a C program that print the exit status of a terminated child process.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+// Driver code
+int main(void)
+{
+pid_t pid = fork();
+if ( pid == 0 )
+{
+/* The pathname of the file passed to execl()
+is not defined */
+execl("/bin/sh", "bin/sh", "-c", "./nopath", "NULL");
+}
+int status;
+waitpid(pid, &status, 0);
+if ( WIFEXITED(status) )
+{
+int exit_status = WEXITSTATUS(status);
+printf("Exit status of the child was %d\n",
+exit_status);
+}
+return 0;
+}
+
+
+
+
+B) Write a C program that will read a directory containing a set of files, create a new sub directory called “backup” in same directory and copy all the files from directory to the new sub directory “backup”. You are supposed to use exec() with “cp” command. ( Create child processes that can execute each of the cp commands to copy the file from directory to subdirectory “backup”)
+
+
+
+

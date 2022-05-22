@@ -1,0 +1,180 @@
+A) Create a Simple Android Application Which Send ―Hello‖ message from one activity to another with help of Button (Use Intent).
+
+
+Activitymain.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<EditText
+android:id="@+id/send_text_id"
+android:layout_width="300dp"
+android:layout_height="wrap_content"
+android:textSize="25dp"
+android:hint="Input"
+android:textStyle="bold"
+android:layout_marginTop="20dp"
+android:layout_marginLeft="40dp"/>
+<Button
+android:id="@+id/send_button_id"
+android:layout_width="wrap_content"
+android:layout_height="40dp"
+android:text="send"
+android:textStyle="bold"
+android:layout_marginTop="150dp"
+android:layout_marginLeft="150dp"/>
+</RelativeLayout>
+Mainactivity.java
+package com.example.myhello_intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+Button send_button;
+EditText send_text;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+send_button = (Button)findViewById(R.id.send_button_id);
+send_text = (EditText)findViewById(R.id.send_text_id);
+send_button.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v)
+{
+String str = send_text.getText().toString();
+Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
+intent.putExtra("message_key", str);
+startActivity(intent);
+}
+});
+}
+}
+Activitysecond.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SecondActivity">
+<TextView
+android:id="@+id/received_value_id"
+android:layout_width="300dp"
+android:layout_height="50dp"
+android:textStyle="bold"
+android:textSize="40dp"
+android:layout_marginTop="20dp"
+android:layout_marginLeft="40dp"/>
+</RelativeLayout>
+SecondActivity.java
+package com.example.myhello_intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+public class SecondActivity extends AppCompatActivity {
+TextView receiver_msg;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_second_activity);
+receiver_msg = (TextView)findViewById(R.id.received_value_id);
+Intent intent = getIntent();
+String str = intent.getStringExtra("message_key");
+receiver_msg.setText(str);
+}
+}
+
+
+
+A)Write a C program to find file properties such as inode number, number of hard link, File permissions, File size, File access and modification time and so on of a given file using fstat() system call.
+
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char *argv[]) {
+struct stat info;
+if (argc != 2) {
+printf("Enter filename\n");
+}
+if (stat(argv[1], &info) == -1) {
+printf("stat erro");
+exit(EXIT_FAILURE);
+}
+printf("I-node number: %ld\n", (long) info.st_ino);
+printf("File size: %lld bytes\n",(long long) info.st_size);
+printf("Last file access: %s", ctime(&info.st_atime));
+printf("Last file modification: %s", ctime(&info.st_mtime));
+printf("No of hard links: %d\n",info.st_nlink);
+printf("File Permissions: \t");
+printf( (info.st_mode & S_IRUSR) ? "r" : "-");
+printf( (info.st_mode & S_IWUSR) ? "w" : "-");
+printf( (info.st_mode & S_IXUSR) ? "x" : "-");
+printf( (info.st_mode & S_IRGRP) ? "r" : "-");
+printf( (info.st_mode & S_IWGRP) ? "w" : "-");
+printf( (info.st_mode & S_IXGRP) ? "x" : "-");
+printf( (info.st_mode & S_IROTH) ? "r" : "-");
+printf( (info.st_mode & S_IWOTH) ? "w" : "-");
+printf( (info.st_mode & S_IXOTH) ? "x" : "-");
+putchar('\n');
+}
+
+
+
+B) Write a C program to implement the following unix/linux command (use fork, pipe and exec system call). Your program should block the signal Ctrl-C and Ctrl-\ signal during the execution.
+ls –l | wc–l
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include<errno.h>
+#include<sys/wait.h>
+#include <unistd.h>
+int main(){
+// array of 2 size a[0] is for
+// reading and a[1] is for
+// writing over a pipe
+int a[2];
+// using pipe for inter process communication
+pipe(a);
+if(!fork())
+{
+// closing normal stdout
+close(1);
+// making stdout same as a[1]
+dup(a[1]);
+// closing reading part of pipe
+// we don't need of it at this time
+close(a[0]);
+// executing ls
+execlp("ls","ls",NULL);
+}
+else
+{
+// closing normal stdin
+close(0);
+// making stdin same as a[0]
+dup(a[0]);
+// closing writing part in parent,
+// we don't need of it at this time
+close(a[1]);
+// executing wc
+execlp("wc","wc",NULL);
+}
+}
+
+
+
+
+
+

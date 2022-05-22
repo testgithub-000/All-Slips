@@ -1,0 +1,284 @@
+1 A) Create an Android application that will change color of the screen and change the font size of text view using xml.
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<TextView
+android:id="@+id/tv"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Hello World!"
+android:textSize="50dp"/>
+<Button
+android:id="@+id/b"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Change Color"/>
+</LinearLayout>
+MainActivity.java
+package com.example.mychange_color;
+import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+public class MainActivity extends AppCompatActivity {
+TextView tv;
+Button b1;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+tv=(TextView)findViewById(R.id.tv);
+b1=(Button)findViewById(R.id.b);
+b1.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+tv.setTextSize(20);
+changecolor(Color.RED);
+}
+});
+}
+public void changecolor(int c)
+{
+View v=this.getWindow().getDecorView();
+v.setBackgroundColor(c);
+}
+}
+
+
+
+
+B) Create table Project(id,name,dept,city). Create Application to perform the following operations.(usingsqlite database)
+i) Add records.
+ii) Display all the records.
+
+
+Activity_main.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity"
+android:orientation="vertical">
+<EditText
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/pid"
+android:hint="Enter project id" />
+<EditText
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/name"
+android:hint="Enter project name" />
+<EditText
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/dept"
+android:hint="Enter project department" />
+<EditText
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/city"
+android:hint="Enter project city" />
+<Button
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/insert"
+android:text="INSERT" />
+<Button
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:id="@+id/save"
+android:text="SHOW" />
+<ListView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/lv" />
+</LinearLayout>
+MainActivity.java
+package com.example.database_project;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity {
+Button insert, show;
+ListView lv;
+EditText et1, et2, et3, et4;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+insert = (Button) findViewById(R.id.insert);
+show = (Button) findViewById(R.id.save);
+ProjectDB projdb = new ProjectDB(this, "Project.db", null, 1);
+insert.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+et1 = (EditText) findViewById(R.id.pid);
+et2 = (EditText) findViewById(R.id.name);
+et3 = (EditText) findViewById(R.id.dept);
+et4 = (EditText) findViewById(R.id.city);
+String pid = et1.getText().toString();
+String pname =et2.getText().toString();
+String dept = et3.getText().toString();
+String city = et4.getText().toString();
+long r= projdb.addDetails(pid, pname, dept, city);
+if(r>0){
+Toast.makeText(MainActivity.this, "Values inserted successfully",
+Toast.LENGTH_SHORT).show();
+}
+}
+});
+show.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+lv = (ListView) findViewById(R.id.lv);
+ArrayList<Project> l = projdb.getDetails();
+ArrayAdapter aa = new ArrayAdapter(getApplicationContext(),
+android.R.layout.simple_list_item_1, l);
+lv.setAdapter(aa);
+}
+});
+}
+}
+Projectdb.java
+package com.example.database_project;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
+public class ProjectDB extends SQLiteOpenHelper {
+public ProjectDB(Context c, String dbname, SQLiteDatabase.CursorFactory cf,
+int v){
+super(c, dbname, cf, v);
+}
+@Override
+public void onCreate(SQLiteDatabase db) {
+db.execSQL("create table project(pid varchar(30), pname text, dept text, city
+text)");
+}
+long addDetails(String pid, String pname, String dept, String city){
+ContentValues cv = new ContentValues();
+cv.put("pid", pid);
+cv.put("pname", pname);
+cv.put("dept", dept);
+cv.put("city", city);
+SQLiteDatabase db = getWritableDatabase();
+long ret = db.insert("project", null, cv);
+return ret;
+}
+ArrayList<Project> getDetails(){
+String sql = "select * from project";
+SQLiteDatabase db = getReadableDatabase();
+ArrayList<Project> plist = new ArrayList<Project>();
+Cursor c = db.rawQuery(sql, null);
+if(c.getCount()>0){
+c.moveToFirst();
+do{
+String pid = c.getString(0);
+String pname = c.getString(1);
+String dept = c.getString(2);
+String city = c.getString(3);
+Project p1 = new Project(pid, pname, dept, city);
+plist.add(p1);
+}while(c.moveToNext());
+}
+return plist;
+}
+@Override
+public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+}
+}
+Project.java
+package com.example.database_project;
+public class Project {
+String pid, pname, dept, city;
+public Project(String pid, String name, String dept, String city){
+this.pid = pid;
+this.pname = name;
+this.dept = dept;
+this.city = city;
+}
+public String getPid(){
+return this.pid;
+}
+public String getPname(){
+return this.pname;
+}
+public String getDept(){
+return this.dept;
+}
+public String getCity(){
+return this.city;
+}
+}
+
+
+A) Write a C program to move the content of file1.txt to file2.txt and remove the file1.txt from directory.
+
+
+#include<stdio.h>
+#include<fcntl.h>
+#include<unistd.h>
+#define buffersize 10000
+int main()
+{
+char source[25],destination[25]; //Source and destination filename
+char buffer[buffersize]; //Character buffer
+ssize_t read_in,write_out; //Number of bytes returned by single read and write operation
+printf(“Enter source file name”);
+scanf(“%s”,&source);
+printf(“%s”,source);
+int sourcefiledesc = open(source,O_RDONLY); //Source file open in read only mode
+if(sourcefiledesc < 0 )
+{
+printf(“Source file not Exist”); //Source file not found
+}
+else
+{
+printf(“Enter destination file name”);
+scanf(“%s”,&destination);
+/* Destination file open in write mode and if not found then create*/
+int destfiledesc = open(destination,O_WRONLY | O_CREAT);
+while((read_in = read(sourcefiledesc,&buffer,buffersize))>0)
+{
+write_out = write(destfiledesc,&buffer,read_in);
+}
+if (remove(sourcefiledesc) == 0)
+printf("File Deleted successfully");
+else
+printf("Unable to delete the file");
+close(sourcefiledesc);
+close(destfiledesc);
+}
+return 0;
+}
+
+
+
+
+
+
+B) Write a C program which creates a child process to run linux/ unix command or any user defined program. The parent process set the signal handler for death of child signal and Alarm signal. If a child process does not complete its execution in 5 second then parent process kills child process.
+
+
+
+
+

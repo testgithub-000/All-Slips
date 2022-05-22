@@ -1,0 +1,267 @@
+B) Construct an Android Application to accept a number and calculate Factorial and Sum of Digits of a given number using Menu.
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<EditText
+android:layout_marginTop="200dp"
+android:layout_marginLeft="50dp"
+android:layout_width="200dp"
+android:layout_height="50dp"
+android:id="@+id/et"
+android:hint="Enter a number"/>
+</LinearLayout>
+menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/fact"
+android:title="Factorial" />
+<item android:id="@+id/sum"
+android:title="Sum" />
+</menu>
+MainActivity.java
+package com.example.myfactorialsum;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+int num;
+String value;
+EditText et;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+}
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+//return super.onCreateOptionsMenu(menu);
+MenuInflater mi = getMenuInflater();
+mi.inflate(R.menu.menu, menu);
+return true;
+}
+@Override
+public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//return super.onOptionsItemSelected(item);
+et=(EditText) findViewById(R.id.et);
+value= et.getText().toString();
+if(!value.isEmpty()){
+try{
+num = Integer.parseInt(value);
+int id;
+id= item.getItemId();
+int t=num;
+switch(id){
+case R.id.fact:int fact=1;
+while(t>0){
+fact*=t;
+t--;
+}
+Toast.makeText(this, "Factorial="+fact,
+Toast.LENGTH_SHORT).show();
+break;
+case R.id.sum:int sum=0;
+while(t>0){
+sum=sum+t;
+t--;
+}
+Toast.makeText(this, "Sum="+sum, Toast.LENGTH_SHORT).show();
+break;
+}
+}
+catch (NumberFormatException ne){
+Log.e("Error", ""+ne.getMessage());
+}
+}
+return true;
+}
+}
+
+
+
+
+A) Write a C program to create variable length arrays using alloca() system call.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// Structure of type student
+struct student {
+int stud_id;
+int name_len;
+int struct_size;
+char stud_name[0];
+// variable length array must be
+// last.
+};
+// Memory allocation and initialisation of structure
+struct student* createStudent(struct student* s, int id,
+char a[])
+{
+s = alloca(sizeof(*s) + sizeof(char) * strlen(a));
+s->stud_id = id;
+s->name_len = strlen(a);
+strcpy(s->stud_name, a);
+s->struct_size
+= (sizeof(*s)
++ sizeof(char) * strlen(s->stud_name));
+return s;
+}
+// Print student details
+void printStudent(struct student* s)
+{
+printf("Student_id : %d\n"
+"Stud_Name : %s\n"
+"Name_Length: %d\n"
+"Allocated_Struct_size: %d\n\n",
+s->stud_id, s->stud_name, s->name_len,
+s->struct_size);
+// Value of Allocated_Struct_size here is in bytes.
+}
+// Driver Code
+int main()
+{
+struct student *s1, *s2;
+s1 = createStudent(s1, 523, "Sanjayulsha");
+s2 = createStudent(s2, 535, "Cherry");
+printStudent(s1);
+printStudent(s2);
+// size in bytes
+printf("Size of Struct student: %lu\n",
+sizeof(struct student));
+// size in bytes
+printf("Size of Struct pointer: %lu", sizeof(s1));
+return 0;
+}
+
+
+
+
+
+B) Write a C program that behaves like a shell (command interpreter). It has its own prompt say “NewShell$”. Any normal shell command is executed from your shell by starting a child process to execute the system program corresponding to the command. It should additionally interpret the following command.
+i) count c <filename> - print number of characters in file
+ii) count w <filename> - print number of words in file
+iii) count l <filename> - print number of lines in file
+
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<dirent.h>
+char *buff,*t1,*t2,*t3,ch;
+int pid;
+void list(char t2,char *t3)
+{
+DIR *dir;
+struct dirent *entry;
+int cnt=0;
+dir=opendir(t3);
+if (dir==NULL)
+{
+printf("Directory %s not found",t3);
+return;
+}
+switch(t2)
+{
+case 'f' : while((entry=readdir(dir))!=NULL)
+{
+printf("%s\n",entry->d_name);
+}
+break;
+case 'n' : while((entry=readdir(dir))!=NULL)
+cnt++;
+printf("Total No of Entries: %d\n",cnt);
+break;
+case 'i' : while((entry=readdir(dir))!=NULL)
+{
+printf("\n%s\t %d",entry->d_name,entry->d_ino);
+}
+break;
+default : printf("Invalid argument");
+}
+closedir(dir);
+}
+main()
+{
+while(1)
+{
+printf("myshell$");
+fflush(stdin);
+t1=(char *)malloc(80);
+t2=(char *)malloc(80);
+t3=(char *)malloc(80);
+buff=(char *)malloc(80);
+fgets(buff,80,stdin);
+sscanf(buff,"%s %s %s",t1,t2,t3);
+if(strcmp(t1,"pause")==0)
+exit(0);
+else if(strcmp(t1,"list")==0)
+list(t2[0],t3);
+else
+{
+pid=fork();
+if(pid<0)
+printf("Child process is not created\n");
+else if(pid==0)
+{
+execlp("/bin",NULL);
+if(strcmp(t1,"exit")==0)
+exit(0);
+system(buff);
+}
+else
+{
+wait(NULL);
+exit(0);
+}
+}
+}
+}
+/*Output:-
+[root@localhost ass1]# ./a.out
+myshell$list f ass2
+rr.C
+NPSJP.C
+PSJF.C
+PRIORITY.BAK
+..
+.
+PP.BAK
+PRIORITY.C
+PP.C
+myshell$list n ass2
+Total No of Entries: 9
+myshell$list i ass2
+rr.C 1452033
+NPSJP.C 1452013
+PSJF.C 1452032
+PRIORITY.BAK 1452016
+.. 1451875
+. 1452001
+PP.BAK 1452014
+PRIORITY.C 1452017
+PP.C 1452015
+myshell$ls
+#a.c# a.out ass2 a.txt b.c count.c list.c search.c s.txt typeline.c
+myshell$pause
+
+
+

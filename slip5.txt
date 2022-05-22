@@ -1,0 +1,185 @@
+A) Write an Android Program to Change the Image Displayed on the Screen
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<ImageSwitcher
+android:layout_width="match_parent"
+android:layout_height="500dp"
+android:id="@+id/is"
+tools:ignore="MissingConstraints" />
+<Button
+android:id="@+id/bt"
+android:layout_width="100dp"
+android:layout_height="75dp"
+android:text="img slider"/>
+</LinearLayout>
+MainActivity.java
+package com.example.myimage_switcher;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
+public class MainActivity extends AppCompatActivity {
+private ImageSwitcher is;
+int imgs[]={R.drawable.img, R.drawable.img_1,R.drawable.img_2};
+int cnt=imgs.length;
+int currindex=-1;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+ImageSwitcher is=(ImageSwitcher) findViewById(R.id.is);
+Button bt=(Button) findViewById(R.id.bt);
+is.setFactory(new ViewSwitcher.ViewFactory() {
+@Override
+public View makeView() {
+ImageView iv=new ImageView(getApplicationContext());
+iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+iv.setLayoutParams(new
+ImageSwitcher.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+LinearLayout.LayoutParams.WRAP_CONTENT));
+return iv;
+}
+});
+Animation in=
+AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+Animation out=
+AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+is.setInAnimation(in);
+is.setInAnimation(out);
+bt.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+currindex++;
+if(currindex==cnt)
+currindex=0;
+is.setImageResource(imgs[currindex]);
+}
+});
+}
+}
+
+
+
+
+
+A) Write a C program to create an unnamed pipe. The child process will write following three messages to pipe and parent process display it.
+Message1 = “Hello World”
+Message2 = “Hello SPPU”
+Message3 = “Linux is Funny”
+
+
+#include<stdio.h>
+#include<unistd.h>
+int main() {
+int pipefds[2];
+int returnstatus;
+char writemessages[3][20]={"Hello World", "Hello SPPU","Linux is Funny"};
+char readmessage[20];
+returnstatus = pipe(pipefds);
+if (returnstatus == -1) {
+printf("Unable to create pipe\n");
+return 1;
+}
+int child = fork();
+if(child==0){
+printf("Child is Writing to pipe - Message 1 is %s\n", writemessages[0]);
+write(pipefds[1], writemessages[0], sizeof(writemessages[0]));
+printf("Child is Writing to pipe - Message 2 is %s\n", writemessages[1]);
+write(pipefds[1], writemessages[1], sizeof(writemessages[1]));
+printf("Child is Writing to pipe - Message 3 is %s\n", writemessages[2]);
+write(pipefds[1], writemessages[2], sizeof(writemessages[2]));
+}
+else
+{
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 1 is %s\n",
+readmessage);
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 2 is %s\n",
+readmessage);
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 3 is %s\n",
+readmessage);
+}
+}
+
+
+
+B)Write a C program to read all txt files (that is files that ends with .txt) in the current directory and merge them all to one txt file and returns a file descriptor for the new file
+
+
+
+#include<stdio.h>
+#include<fcntl.h>
+#include<dirent.h>
+#include<string.h>
+int openf(char *);
+int main()
+{
+DIR *i;
+struct dirent *k;
+int j,l,s,flag=1,fd,fd1;
+char *m = “txt.”;
+char ch;
+fd1 = openf(“new.txt”);
+i = opendir(“./test”);
+printf(“\n%d\n”,i);
+
+while(( k = readdir(i)) !=  NULL)
+{
+flag=1;
+l=strlen(k->d_name);
+for(j = l-1,s=0;j >= l-4,s < 4 ;j–,s++ )
+{
+if((k->d_name[j])!= m[s])
+{
+flag=0;
+goto q;
+}
+
+}
+q:         if(flag==1)
+{
+fd = openf(k->d_name);
+while(read(fd, &ch, 1))
+write(fd1,&ch,1);
+close(fd);
+}
+}
+printf(“\n”);
+close(fd1);
+}
+int openf(char * s)
+{
+int fd;
+fd = open(s,O_RDWR|O_CREAT,0666);
+if(fd < 1)
+perror(“open error”);
+else
+printf(“input file open succesfull fd = %d\n”,fd);
+return fd;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,340 @@
+Construct an Android app that toggles a light bulb on and off when the user clicks on toggle button
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+<ToggleButton
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:id="@+id/toggle"
+android:textOff="power off"
+android:textOn="power on"
+android:drawableStart="@drawable/selector"
+android:layout_marginTop="40dp"/>
+<ImageView
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/imageView"
+android:layout_marginTop="20dp"/>
+</LinearLayout>
+Selector.xml
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:state_checked="true" android:drawable="@drawable/img_1"/>
+<item android:state_checked="false" android:drawable="@drawable/img"/>
+</selector>
+MainActivity.java
+package com.example.mybulb;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ToggleButton;
+public class MainActivity extends AppCompatActivity {
+ToggleButton toggleButton;
+ImageView imageView;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+toggleButton=findViewById(R.id.toggle);
+imageView=findViewById(R.id.imageView);
+imageView.setImageDrawable(getResources().getDrawable(R.drawable.img));
+toggleButton.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+if (toggleButton.isChecked()) {
+imageView.setImageDrawable(getResources().getDrawable(R.drawable.img));
+}
+else {
+imageView.setImageDrawable(getResources().getDrawable(R.drawable.img_1));
+}
+}
+});
+}
+}
+
+
+
+
+
+B) Construct an Android application to accept a number and calculate Armstrong and Perfect number of a given number using Menu.
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:gravity="center"
+tools:context=".MainActivity">
+<EditText
+android:layout_marginTop="200dp"
+android:layout_marginLeft="50dp"
+android:layout_width="200dp"
+android:layout_height="50dp"
+android:id="@+id/et"
+android:hint="Enter a number"/>
+</LinearLayout>
+MainActivity.java
+package com.example.myarmstrongperfect;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+int num;
+String value;
+EditText et;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+}
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+//return super.onCreateOptionsMenu(menu);
+MenuInflater mi = getMenuInflater();
+mi.inflate(R.menu.mymenu, menu);
+return true;
+}
+@Override
+public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//return super.onOptionsItemSelected(item);
+et=(EditText) findViewById(R.id.et);
+value= et.getText().toString();
+if(!value.isEmpty()){
+try{
+num = Integer.parseInt(value);
+int id;
+id= item.getItemId();
+int t=num;
+switch(id){
+case R.id.perfect:int ans=0;
+int div=1;
+while(div<t){
+if (t%div==0)
+ans=ans + div;
+div++;
+}
+if(ans==num)
+Toast.makeText(getApplicationContext(), "Number "+ num+ " is
+perfect", Toast.LENGTH_SHORT).show();
+else
+Toast.makeText(getApplicationContext(), "Number "+ num+ " is
+not perfect", Toast.LENGTH_SHORT).show();
+break;
+case R.id.arms:ans=0;
+while(t>0){
+int rem = t%10;
+ans += Math.pow(rem, 3);
+t=t/10;
+}
+if(ans==num)
+Toast.makeText(this, "Number "+ num + " is an armstrong
+number", Toast.LENGTH_SHORT).show();
+else
+Toast.makeText(this, "Number "+ num + " is not an armstrong
+number", Toast.LENGTH_SHORT).show();
+break;
+}
+}
+catch (NumberFormatException ne){
+Log.e("Error", ""+ne.getMessage());
+}
+}
+return true;
+}
+}
+Mymenu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/perfect"
+android:title="Perfect" />
+<item android:id="@+id/arms"
+android:title="Armstrong" />
+</menu>
+
+
+
+
+2 A) Write a C program to create an unnamed pipe. Write following three messages to pipe and display it.
+Message1 = “Hello World”
+Message2 = “Hello SPPU”
+Message3 = “Linux is Funny”
+
+
+
+
+#include<stdio.h>
+#include<unistd.h>
+int main() {
+int pipefds[2];
+int returnstatus;
+char writemessages[3][20]={"Hello World", "Hello SPPU","Linux is Funny"};
+char readmessage[20];
+returnstatus = pipe(pipefds);
+if (returnstatus == -1) {
+printf("Unable to create pipe\n");
+return 1;
+}
+int child = fork();
+if(child==0){
+printf("Child is Writing to pipe - Message 1 is %s\n", writemessages[0]);
+write(pipefds[1], writemessages[0], sizeof(writemessages[0]));
+printf("Child is Writing to pipe - Message 2 is %s\n", writemessages[1]);
+write(pipefds[1], writemessages[1], sizeof(writemessages[1]));
+printf("Child is Writing to pipe - Message 3 is %s\n", writemessages[2]);
+write(pipefds[1], writemessages[2], sizeof(writemessages[2]));
+}
+else
+{
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 1 is %s\n",
+readmessage);
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 2 is %s\n",
+readmessage);
+read(pipefds[0], readmessage, sizeof(readmessage));
+printf("Parent Process is Reading from pipe – Message 3 is %s\n",
+readmessage);
+}
+}
+
+
+
+
+
+B) Write a C program that behaves like a shell (command interpreter). It has its own prompt say “NewShell$”.Any normal shell command is executed from your shell by starting a child process to execute the system program corresponding to the command. It should additionally interpret the following command.
+i) search f <pattern><filename> - search first occurrence of pattern in filename
+ii) search c <pattern><filename> - count no. of occurrences of pattern in filename
+iii) search a <pattern><filename> - search all occurrences of pattern in filename
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<string.h>
+char *buff,*t1,*t2,*t3,*t4,ch;
+FILE *fp;
+int pid;
+void search(char *t2,char *t3,char *t4)
+{
+int i=1,count=0;
+char *p;
+if((fp=fopen(t4,"r"))==NULL)
+printf("File not found\n");
+else
+{
+if(strcmp(t2,"f")==0)
+{
+while(fgets(buff,80,fp))
+{
+if((strstr(buff,t3))!=NULL)
+{
+printf("%d: %s\n",i,buff);
+break;
+}
+}
+i++;
+}
+else if(strcmp(t2,"c")==0)
+{
+while(fgets(buff,80,fp))
+{
+if((strstr(buff,t3))!=NULL)
+{
+count++;
+}
+}
+printf("No of occurences of %s= %d\n",t3,count);
+}
+else if(strcmp(t2,"a")==0)
+{
+while(fgets(buff,80,fp))
+{
+if((strstr(buff,t3))!=NULL)
+{
+printf("%d: %s\n",i,buff);
+}
+i++;
+}
+}
+else
+printf("Command not found\n");
+fclose(fp);
+}
+}
+main()
+{
+while(1)
+{
+printf("myshell$");
+fflush(stdin);
+t1=(char *)malloc(80);
+t2=(char *)malloc(80);
+t3=(char *)malloc(80);
+t4=(char *)malloc(80);
+buff=(char *)malloc(80);
+fgets(buff,80,stdin);
+sscanf(buff,"%s %s %s %s",t1,t2,t3,t4);
+if(strcmp(t1,"pause")==0)
+exit(0);
+else if(strcmp(t1,"search")==0)
+search(t2,t3,t4);
+else
+{
+pid=fork();
+if(pid<0)
+printf("Child process is not created\n");
+else if(pid==0)
+{
+execlp("/bin",NULL);
+if(strcmp(t1,"exit")==0)
+exit(0);
+system(buff);
+}
+else
+{
+wait(NULL);
+exit(0);
+}
+}
+}
+}
+/*
+Output:-
+[root@localhost ass1]# cc search.c
+[root@localhost ass1]# ./a.out
+myshell$search f aa s.txt
+1: hello aa welcome
+myshell$search c dyp s.txt
+No of occurences of dyp= 3
+myshell$search a dyp s.txt
+2: dyp bb
+3: tybcs aa dyp
+5: dyp gm
+myshell$ls
+#a.c# a.out a.txt b.c count.c list.c search.c s.txt typeline.c
+myshell$pause
+*/
+
+
